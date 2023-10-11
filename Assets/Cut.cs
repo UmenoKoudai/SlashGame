@@ -13,7 +13,7 @@ public class Cut : MonoBehaviour
     {
         if(Input.GetButtonDown("Fire1"))
         {
-            MeshCut.Cut(_cutObject, _anchorPoint.position, _normalDirection.right, _cutMesh);
+            MeshCut.Cut(_cutObject, _anchorPoint.position, _normalDirection.position, _cutMesh);
         }
     }
 }

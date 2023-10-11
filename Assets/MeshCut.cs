@@ -168,8 +168,6 @@ namespace BLINDED_AM_ME
             {
                 // サブメッシュのインデックス数を取得
                 indices = victim_mesh.GetIndices(0);
-                Debug.Log($"MeshCount{victim_mesh.subMeshCount}");
-                Debug.Log(string.Join(" ", indices));
                 // List<List<int>>型のリスト。サブメッシュ一つ分のインデックスリスト
                 left_side.subIndices.Add(new List<int>());  // 左
                 right_side.subIndices.Add(new List<int>()); // 右
@@ -184,12 +182,14 @@ namespace BLINDED_AM_ME
 
                     // それぞれ評価中のメッシュの頂点が、冒頭で定義された平面の左右どちらにあるかを評価。
                     // `GetSide` メソッドによりboolを得る。
+                    //bladeから見て０地点より大きかったら左側(true)小さかったら右側(false)を取得
                     sides[0] = blade.GetSide(victim_mesh.vertices[p1]);
                     sides[1] = blade.GetSide(victim_mesh.vertices[p2]);
                     sides[2] = blade.GetSide(victim_mesh.vertices[p3]);
 
                     // whole triangle
                     // 頂点０と頂点１および頂点２がどちらも同じ側にある場合はカットしない
+                    //３つの地点が全てtrueまたはfalseの場合bladeはオブジェクトを分断できていないのでカット処理を実行しない
                     if (sides[0] == sides[1] && sides[0] == sides[2])
                     {
                         if (sides[0])
@@ -389,6 +389,7 @@ namespace BLINDED_AM_ME
                 }
             }
 
+            //ここまで10/10
             // 分割された点の比率計算のための距離
             float normalizedDistance = 0f;
 

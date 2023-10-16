@@ -122,6 +122,8 @@ namespace BLINDED_AM_ME
 
         private static Plane blade;
         private static Mesh victim_mesh;
+        public static Vector3[] _leftPoint;
+        public static Vector3[] _rightPoint;
 
         // capping stuff
         private static List<Vector3> new_vertices = new List<Vector3>();
@@ -142,6 +144,12 @@ namespace BLINDED_AM_ME
                 victim.transform.InverseTransformDirection(-normalDirection),
                 victim.transform.InverseTransformPoint(anchorPoint)
             );
+            GameObject plane = new GameObject("Blade");
+            plane.transform.position = anchorPoint;
+            plane.transform.rotation = Quaternion.LookRotation(normalDirection);
+
+            PlaneRenderer renderer = plane.AddComponent<PlaneRenderer>();
+            renderer.blade = blade;
 
             // get the victims mesh
             // 対象のメッシュを取得
@@ -396,7 +404,8 @@ namespace BLINDED_AM_ME
             // 距離
             float distance = 0f;
 
-
+            _leftPoint = leftPoints;
+            _rightPoint = rightPoints;
             // ---------------------------
             // 左側の処理
 
@@ -404,6 +413,7 @@ namespace BLINDED_AM_ME
             // つまり、平面によって分割される点を探す。
             // 左の点を起点に、右の点に向けたレイを飛ばし、その分割点を探る。
             blade.Raycast(new Ray(leftPoints[0], (rightPoints[0] - leftPoints[0]).normalized), out distance);
+            Debug.DrawRay(leftPoints[0], (rightPoints[0] - leftPoints[0]).normalized, Color.red);
 
             // 見つかった交差点を、頂点間の距離で割ることで、分割点の左右の割合を算出する
             normalizedDistance = distance / (rightPoints[0] - leftPoints[0]).magnitude;
@@ -420,7 +430,9 @@ namespace BLINDED_AM_ME
             // ---------------------------
             // 右側の処理
 
+
             blade.Raycast(new Ray(leftPoints[1], (rightPoints[1] - leftPoints[1]).normalized), out distance);
+            Debug.DrawRay(leftPoints[1], (rightPoints[1] - leftPoints[1]).normalized, Color.red);
 
             normalizedDistance = distance / (rightPoints[1] - leftPoints[1]).magnitude;
             Vector3 newVertex2 = Vector3.Lerp(leftPoints[1], rightPoints[1], normalizedDistance);

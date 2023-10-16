@@ -8,12 +8,19 @@ public class Cut : MonoBehaviour
     [SerializeField] GameObject _cutObject;
     [SerializeField] Transform _anchorPoint;
     [SerializeField] Transform _normalDirection;
-    [SerializeField] Material _cutMesh; 
+    [SerializeField] Material _cutMesh;
+
     private void Update()
     {
-        if(Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1"))
         {
             MeshCut.Cut(_cutObject, _anchorPoint.position, _normalDirection.position, _cutMesh);
         }
     }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(_anchorPoint.position, _normalDirection.position);
+    }
+
 }
